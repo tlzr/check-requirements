@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import sys
 import urllib2
@@ -21,3 +21,4 @@ if __name__ == "__main__":
 	if urlre.match(REQUIREMENTS) is None:
             print 'The URL is misspelled.'
             sys.exit(3)
+"""
