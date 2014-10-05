@@ -18,6 +18,8 @@ import sys
 #knownBuilds = ('python-novaclient', 'nova')
 gitloc = 'https://github.com/openstack/'
 repodir = 'cache'
+reqfile = 'requirements.txt'
+logformat = 'format:%H,%at'
 
 def check_args():
     if not len(sys.argv) > 1:
@@ -30,7 +32,7 @@ def check_path(name):
     if os.path.exists(repoloc):
         repo = git.Git(repoloc)
         repo.pull()
-        repo.log('--since=1410993264', '--pretty=format:%H,%at')
+        repo.log('--since=1410993264', '--pretty=' + logformat, reqfile)
         repo.config('remote.origin.url')
     else:
         git_clone(name, repoloc)
