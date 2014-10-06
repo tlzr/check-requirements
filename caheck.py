@@ -26,7 +26,7 @@ def check_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--save', metavar=('PROJECT', 'HASH'), nargs=2, help='Save the commit')
     parser.add_argument('-sl', '--save-last', metavar=('PROJECT'), nargs=1, help='Save the last commit')
-    parser.add_argument('projects', nargs='+', help='List of projects, e.g. nova or python-novaclient')
+    parser.add_argument('projects', nargs='*', help='List of projects, e.g. nova or python-novaclient')
 
     try:
         args = parser.parse_args()
