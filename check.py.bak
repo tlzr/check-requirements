@@ -106,7 +106,13 @@ def git_log(name):
         #logs = StringIO.StringIO(repo.log('--since=' + commit_unixtime, '--pretty=' + logformat, reqfile))
         last_commit_hash = StringIO.StringIO(repo.log('-1', '--branches', '--pretty=format:%H', reqfile))
         last_commit_hash = last_commit_hash.readline()
+        #print last_commit_hash
+        #sys.exit(0)
+        #logs = StringIO.StringIO(repo.log('--date-order', '--simplify-by-decoration', commit_hash + '..' + last_commit_hash, '--pretty=' + logformat, reqfile))
         logs = StringIO.StringIO(repo.log('--branches', commit_hash + '..' + last_commit_hash, '--pretty=' + logformat, reqfile))
+        #print last_commit_hash
+        for i in logs:
+            print i
     else:
         logs = StringIO.StringIO(repo.log('--pretty=' + logformat, reqfile))
 
@@ -121,27 +127,19 @@ def git_log(name):
 
     if args.save_last:
         line = logs.readline()
-        if line:
-            print '\n----------------------\n Saving:\n         %s\
-                   \n----------------------' % (line)
-            git_set_checkpoint(fpath, line)
+        print '\n----------------------\n Saving:\n         %s\
+               \n----------------------' % (line)
+        git_set_checkpoint(fpath, line)
 
     if args.diff and git_check_checkpoint(fpath):
-        line = logs.readline()
-        if line:
-            commit_hash, commit_unixtime = git_get_checkpoint(fpath)
-            upstream_commit_hash, upstream_commit_unixtime = logs.readline().split(',')
-            commit_diff = repo.diff(commit_hash + '..' + upstream_commit_hash, reqfile)
-            if commit_diff:
-                print commit_diff
-
-                if args.send_email:
-                    send_mail(commit_diff)
-        else:
-            print 'No changes'
+        commit_hash, commit_unixtime = git_get_checkpoint(fpath)
+        upstream_commit_hash, upstream_commit_unixtime = logs.readline().split(',')
+        commit_diff = repo.diff(commit_hash + '..' + upstream_commit_hash, reqfile)
+        if commit_diff:
+            print commit_diff
 
             if args.send_email:
-                send_mail('No changes')
+                send_mail(commit_diff)
 
 def git_check_checkpoint(fpath):
     '''Checks if checkpoint exists and if "yes" then validates it
