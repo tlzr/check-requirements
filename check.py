@@ -128,9 +128,10 @@ def git_log(name):
 
     if args.diff and git_check_checkpoint(fpath):
         line = logs.readline()
+        print line
         if line:
             commit_hash, commit_unixtime = git_get_checkpoint(fpath)
-            upstream_commit_hash, upstream_commit_unixtime = logs.readline().split(',')
+            upstream_commit_hash, upstream_commit_unixtime = line.split(',')
             commit_diff = repo.diff(commit_hash + '..' + upstream_commit_hash, reqfile)
             if commit_diff:
                 print commit_diff
